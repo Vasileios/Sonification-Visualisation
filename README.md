@@ -14,7 +14,7 @@ SuperCollider-OpenFrameworks Code - MSAFluids-TUIO-OSC
 - ofxMSAFluid: https://github.com/memo/ofxMSAFluid
 - ofxMSAInteractiveObject: https://github.com/memo/ofxMSAInteractiveObject
 - ofxOpenCv
-- ofxOsc
+- ofxOsc: https://github.com/openframeworks/openFrameworks/tree/master/addons/ofxOsc
 - ofxSimpleGuiToo: https://github.com/memo/ofxSimpleGuiToo
 - ofxTuio: https://github.com/patriciogonzalezvivo/ofxTuio
 - ofxXmlSettings
