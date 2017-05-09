@@ -9,13 +9,13 @@ SuperCollider-OpenFrameworks Code - MSAFluids-TUIO-OSC
 
 ## Addons
 
-ofxGui
-ofxMSACore
-ofxMSAFluid
-ofxMSAInteractiveObject
-ofxOpenCv
-ofxOsc
-ofxSimpleGuiToo
-ofxTuio
-ofxXmlSettings
+- ofxGui
+- ofxMSACore
+- ofxMSAFluid
+- ofxMSAInteractiveObject
+- ofxOpenCv
+- ofxOsc
+- ofxSimpleGuiToo
+- ofxTuio
+- ofxXmlSettings
 
