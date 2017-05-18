@@ -99,18 +99,7 @@ void ofApp::setup(){
     ofVec3f  v0(-100, -100, -100);
     ofVec3f v1(100, -100, -100);
     ofVec3f v2(100, 100, -100);
-    ofVec3f v3(-100, 100, -100);
-    ofVec3f v4(-100, -100, 100);
-    ofVec3f v5(100, -100, 100);
-    ofVec3f v6(100, 100, 100);
-    ofVec3f v7(-100, 100, 100);
-    ofVec3f v8(-150, 140, 300);
-    ofVec3f v9(-190, 130, 320);
-    ofVec3f v10(-200, 135, 360);
-    ofVec3f v11(-230, 100, 380);
-    ofVec3f v12(-250, 80, 390);
-    ofVec3f v13(-300, 70, 410);
-    //
+    
     mesh.addVertex(v0);
     mesh.addColor(ofFloatColor(0.0, 0.0, 0.0));
     
@@ -119,33 +108,6 @@ void ofApp::setup(){
     
     mesh.addVertex(v2);
     mesh.addColor(ofFloatColor(1.0, 1.0, 0.0));
-    
-    mesh.addVertex(v3);
-    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
-    
-    mesh.addVertex(v4);
-    mesh.addColor(ofFloatColor(0.0, 0.0, 1.0));
-    
-    mesh.addVertex(v5);
-    mesh.addColor(ofFloatColor(1.0, 0.0, 1.0));
-    
-    mesh.addVertex(v6);
-    mesh.addColor(ofFloatColor(1.0, 1.0, 1.0));
-    
-    mesh.addVertex(v7);
-    mesh.addColor(ofFloatColor(0.4, 0.8, 0.9));
-    mesh.addVertex(v8);
-    mesh.addColor(ofFloatColor(0.7, 1.0, 0.2));
-    mesh.addVertex(v9);
-    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
-    mesh.addVertex(v10);
-    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
-    mesh.addVertex(v11);
-    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
-    mesh.addVertex(v12);
-    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
-    mesh.addVertex(v13);
-    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
     
     
     
@@ -202,40 +164,32 @@ void ofApp::update(){
         resizeFluid = false;
     }
    
-
     
-    // osc receive from SuperCollider
-    //while(receiver.hasWaitingMessages()){
+    while (receiver.hasWaitingMessages()) {
         ofxOscMessage m;
-        //for(int i = 0; i < m.getNumArgs(); i++){
-        //for(int i = 0; i < NUM_MSG_STRINGS; i++){
-        //  ofDrawBitmapString(msg_strings[i], 10, 40 + 15 * i);
-        //}
+        receiver.getNextMessage(m);
         
+        cout << "got message from OSC\n";
         
-       // int x, y;
-        
-        
-        //if (m.getAddress() == "/data") {
-            receiver.getNextMessage(&m);
+        if (m.getAddress() == "/data"){
+            
+            cout << "message was data as expected\n";
             
             ofVec2f eventPos = ofVec2f(m.getArgAsFloat(0), m.getArgAsFloat(1));
             ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
             ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
             addToFluid(mouseNorm, mouseVel, true, true);
             pMouse = eventPos;
-         
-            cout << m.getArgAsFloat(0) << endl;
-            cout << m.getArgAsFloat(1) << endl;
+            
+            
+        } else if (m.getAddress() == "/vertex") {
+            cout << "message was vertex as expected\n";
+            mesh.addVertex(ofPoint(m.getArgAsFloat(0), m.getArgAsFloat(1), m.getArgAsFloat(2)));
+            mesh.addColor(ofFloatColor(m.getArgAsFloat(3), m.getArgAsFloat(4), m.getArgAsFloat(5)));
+        }
+    }
 
-            //   string msg_string = m.getAddress();
-            //     cout << msg_string << endl;
-            // x = m.getArgType(current_msg_strings);
-            //   cout << msg_string << endl;
-       // }
-        
-    //}
-   
+ /*
 #ifdef USE_TUIO
     tuioClient.getMessage();
     
@@ -252,7 +206,7 @@ void ofApp::update(){
         addToFluid(ofVec2f(tcur->getX() * tuioXScaler, tcur->getY() * tuioYScaler), ofVec2f(vx, vy), true, true);
     }
 #endif
-    
+    */
  
     
     
@@ -290,11 +244,13 @@ void ofApp::draw(){
     /////////---------
 
     //	ofDrawBitmapString(sz, 50, 50);
-#ifdef USE_GUI
+
+/*
+ #ifdef USE_GUI
     
     gui.draw();
 #endif
-    
+ */
     
 
 }
@@ -375,32 +331,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 }
 
 //----------------------------------------------------
-
- 
-//----------------------------------------------------
-//--------------------------------------------------------------
-
-void ofApp::receiveOscMessages(float x, float y, float z){
-    ofxOscMessage m;
-    m.setAddress("data");
-    m.addFloatArg(x);
-    m.addFloatArg(y);
-    m.getArgAsFloat(x);
-    m.getArgAsFloat(y);
-    m.getArgAsFloat(z);
-    
-
-    m.getArgAsBlob(x);
-    m.getArgAsBlob(y);
-    ofVec2f eventPos = ofVec2f(x, y);
-    ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-    ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-    addToFluid(mouseNorm, mouseVel, true, true);
-    pMouse = eventPos;
-    receiver.getNextMessage(m);
-}
 */
-//------------------------------------------------------
 
 void ofApp::mousePressed(int x, int y, int button){
     
