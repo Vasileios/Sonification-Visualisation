@@ -151,13 +151,7 @@ void ofApp::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce) {
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    // hide old messages
-  //  for(int i = 0; i < NUM_MSG_STRINGS; i++){
-    //    if(timers[i] < ofGetElapsedTimef()){
-      //      msg_strings[i] = "";
-            
-       // }
-   // }
+  
     if(resizeFluid) 	{
         fluidSolver.setSize(fluidCellsX, fluidCellsX / msa::getWindowAspectRatio());
         fluidDrawer.setup(&fluidSolver);
