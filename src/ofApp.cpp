@@ -74,6 +74,67 @@ void ofApp::setup(){
     
     ofEnableAlphaBlending();
     ofSetBackgroundAuto(false);
+    
+    
+    ///////------mesh here
+    
+    mesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+    mesh.enableColors();
+    
+    ofVec3f  v0(-100, -100, -100);
+    ofVec3f v1(100, -100, -100);
+    ofVec3f v2(100, 100, -100);
+    ofVec3f v3(-100, 100, -100);
+    ofVec3f v4(-100, -100, 100);
+    ofVec3f v5(100, -100, 100);
+    ofVec3f v6(100, 100, 100);
+    ofVec3f v7(-100, 100, 100);
+    ofVec3f v8(-150, 140, 300);
+    ofVec3f v9(-190, 130, 320);
+    ofVec3f v10(-200, 135, 360);
+    ofVec3f v11(-230, 100, 380);
+    ofVec3f v12(-250, 80, 390);
+    ofVec3f v13(-300, 70, 410);
+    //
+    mesh.addVertex(v0);
+    mesh.addColor(ofFloatColor(0.0, 0.0, 0.0));
+    
+    mesh.addVertex(v1);
+    mesh.addColor(ofFloatColor(1.0, 0.0, 0.0));
+    
+    mesh.addVertex(v2);
+    mesh.addColor(ofFloatColor(1.0, 1.0, 0.0));
+    
+    mesh.addVertex(v3);
+    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
+    
+    mesh.addVertex(v4);
+    mesh.addColor(ofFloatColor(0.0, 0.0, 1.0));
+    
+    mesh.addVertex(v5);
+    mesh.addColor(ofFloatColor(1.0, 0.0, 1.0));
+    
+    mesh.addVertex(v6);
+    mesh.addColor(ofFloatColor(1.0, 1.0, 1.0));
+    
+    mesh.addVertex(v7);
+    mesh.addColor(ofFloatColor(0.4, 0.8, 0.9));
+    mesh.addVertex(v8);
+    mesh.addColor(ofFloatColor(0.7, 1.0, 0.2));
+    mesh.addVertex(v9);
+    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
+    mesh.addVertex(v10);
+    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
+    mesh.addVertex(v11);
+    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
+    mesh.addVertex(v12);
+    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
+    mesh.addVertex(v13);
+    mesh.addColor(ofFloatColor(0.0, 1.0, 1.0));
+    
+    
+    
+/////////////////////////
 }
 
 
@@ -114,95 +175,52 @@ void ofApp::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce) {
 //--------------------------------------------------------------
 void ofApp::update(){
     // hide old messages
-    for(int i = 0; i < NUM_MSG_STRINGS; i++){
-        if(timers[i] < ofGetElapsedTimef()){
-            msg_strings[i] = "";
+  //  for(int i = 0; i < NUM_MSG_STRINGS; i++){
+    //    if(timers[i] < ofGetElapsedTimef()){
+      //      msg_strings[i] = "";
             
-        }
-    }
-   
-//}
-
-    /*
-    ofVec2f eventPos = ofVec2f(x, y);
-        ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-        ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-        addToFluid(mouseNorm, mouseVel, true, true);
-        pMouse = eventPos;
-        //receiver.getNextMessage(&m);
-        
-}
-    }
-     */
-    
-    // check for waiting messages
-    /*
-     // check for waiting messages
-     while(receiver.hasWaitingMessages()){
-     // get the next message
-     ofxOscMessage m;
-     receiver.getNextMessage(m);
-     
-     // check for mouse moved message
-     if(m.getAddress() == "/mouse/position"){
-     // both the arguments are int32's
-     mouseX = m.getArgAsInt32(0);
-     mouseY = m.getArgAsInt32(1);
-     }
-     // check for mouse button message
-     else if(m.getAddress() == "/mouse/button"){
-     // the single argument is a string
-     mouseButtonState = m.getArgAsString(0);
-     }
-     // check for an image being sent (note: the size of the image depends greatly on your network buffer sizes - if an image is too big the message won't come through )
-     else if(m.getAddress() == "/image" ){
-     ofBuffer buffer = m.getArgAsBlob(0);
-     receivedImage.load(buffer);
-     }
-     else{
-     // unrecognized message: display on the bottom of the screen
-     string msg_string;
-     msg_string = m.getAddress();
-     msg_string += ": ";
-     for(int i = 0; i < m.getNumArgs(); i++){
-     // get the argument type
-     msg_string += m.getArgTypeName(i);
-     msg_string += ":";
-     // display the argument - make sure we get the right type
-     if(m.getArgType(i) == OFXOSC_TYPE_INT32){
-					msg_string += ofToString(m.getArgAsInt32(i));
-     }
-     else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
-					msg_string += ofToString(m.getArgAsFloat(i));
-     }
-     else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
-					msg_string += m.getArgAsString(i);
-     }
-     else{
-					msg_string += "unknown";
-     }
-     }
-
-        if (m.getAddress() == "/datastart") cout << "datastart" << endl;
-        
-        if (m.getAddress() == "/datastart")cout << "datastart " << m.getArgAsFloat(0) << endl;
-        
-     
-        if (m.getAddress() == "/horizontal/x") {
-            oscX = m.getArgAsFloat(0);
-        }
-        if (m.getAddress() == "/vertical/x")
-      
-     oscY = m.getArgAsFloat(0);
-     */
-    
-    
+       // }
+   // }
     if(resizeFluid) 	{
         fluidSolver.setSize(fluidCellsX, fluidCellsX / msa::getWindowAspectRatio());
         fluidDrawer.setup(&fluidSolver);
         resizeFluid = false;
     }
+   
+
     
+    // osc receive from SuperCollider
+    //while(receiver.hasWaitingMessages()){
+        ofxOscMessage m;
+        //for(int i = 0; i < m.getNumArgs(); i++){
+        //for(int i = 0; i < NUM_MSG_STRINGS; i++){
+        //  ofDrawBitmapString(msg_strings[i], 10, 40 + 15 * i);
+        //}
+        
+        
+       // int x, y;
+        
+        
+        //if (m.getAddress() == "/data") {
+            receiver.getNextMessage(&m);
+            
+            ofVec2f eventPos = ofVec2f(m.getArgAsFloat(0), m.getArgAsFloat(1));
+            ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+            ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+            addToFluid(mouseNorm, mouseVel, true, true);
+            pMouse = eventPos;
+         
+            cout << m.getArgAsFloat(0) << endl;
+            cout << m.getArgAsFloat(1) << endl;
+
+            //   string msg_string = m.getAddress();
+            //     cout << msg_string << endl;
+            // x = m.getArgType(current_msg_strings);
+            //   cout << msg_string << endl;
+       // }
+        
+    //}
+   
 #ifdef USE_TUIO
     tuioClient.getMessage();
     
@@ -220,167 +238,10 @@ void ofApp::update(){
     }
 #endif
     
-    fluidSolver.update();
-    
-    // osc receive from SuperCollider
-    while(receiver.hasWaitingMessages()){
-        ofxOscMessage m;
-       //for(int i = 0; i < m.getNumArgs(); i++){
-    for(int i = 0; i < NUM_MSG_STRINGS; i++){
-        ofDrawBitmapString(msg_strings[i], 10, 40 + 15 * i);
-    }
-       // m.getAddress();
-        //m.getArgType(current_msg_strings);
-        //m.getArgAsString(current_msg_strings);
-     //   mousex = m.getArgAsChar(current_msg_strings);
-       // mousey = m.getArgAsChar(current_msg_strings);
-      //  mousex = m.getArgAsInfinitum(current_msg_strings);
-        //mousey = m.getArgAsInfinitum(current_msg_strings);
-    //}
-    
-
-            int x, y;
-            //mousex = m.getArgAsInt(0);
-            //mousey = m.getArgAsInt(0);
-        //m.getArgAsInt32(x);
-         //m.getArgAsInt32(y);
-     //  m.getArgAsInt(x);
-      // m.getArgAsInt(y);
-    //m.getArgAsBlob(x);
-   // m.getArgAsBlob(y);
-   // m.getArgAsInt64(x);
-    //m.getArgAsInt64(y);
-    //m.getNumArgs();
-           // if (m.getAddress() == "/data") {
-                receiver.getNextMessage(&m);
-       // m.getArgAsFloat(0);
-                //mousex = m.getArgAsInt(current_msg_strings);
-                //mousey = m.getArgAsInt(current_msg_strings);
-               // mousex = m.getArgAsInt(2);
-                //mousey = m.getArgAsInt(3);
-                
-                ofVec2f eventPos = ofVec2f(m.getArgAsFloat(0), m.getArgAsFloat(1));
-        ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-        ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-        addToFluid(mouseNorm, mouseVel, true, true);
-        pMouse = eventPos;
-        cout << m.getArgAsFloat(0) << endl;
-        string msg_string = m.getAddress();
-        cout << msg_string << endl;
-   // x = m.getArgType(current_msg_strings);
-    cout << msg_string << endl;
-        }
-    
-       //  }
-/*
-        string msg_string;
-        msg_string = m.getAddress();
-        msg_string += ": ";
-        for(int i = 0; i < m.getNumArgs(); i++){
-            // get the argument type
-            msg_string += m.getArgTypeName(i);
-            msg_string += ":";
-            // display the argument - make sure we get the right type
-            if(m.getArgType(i) == OFXOSC_TYPE_INT32){
-                msg_string += ofToString(m.getArgAsInt32(i));
-              //  int x, y;
-                
-             //   mouseX = x;
-                
  
-                ofVec2f eventPos = ofVec2f(x, y);
-                ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-                ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-                addToFluid(mouseNorm, mouseVel, true, true);
-                pMouse = eventPos;
-
-            }
-            else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
-                msg_string += ofToString(m.getArgAsFloat(i));
-             //   float x, y;
-                
-               // mouseX = x;
-                
-                ofVec2f eventPos = ofVec2f(x, y);
-                ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-                ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-                addToFluid(mouseNorm, mouseVel, true, true);
-                pMouse = eventPos;
-
-            }
-            else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
-                msg_string += m.getArgAsString(i);
-            //    string x, y;
-                
-                //mouseX = x;
-                
-                ofVec2f eventPos = ofVec2f(x, y);
-                ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
-                ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
-                addToFluid(mouseNorm, mouseVel, true, true);
-                pMouse = eventPos;
-
-            }
-            else{
-                msg_string += "unknown";
-            }
-        }
-*/
-        // ofxOscMessage m;
-        //string msg_string;
-        //m.setAddress("/data");
-        //  float x = 0.0;
-        // float y = 0.0;
-        //m.addFloatArg(x);
-        //m.addFloatArg(y);
-        //m.getArgAsFloat(x);
-        //m.getArgAsFloat(y);
-        //m.getArgAsFloat(z);
-        // m.addInt32Arg(x);
-        //m.addInt64Arg(x);
-        //m.addIntArg(x);
-        // m.getArgAsInt(x);
-        // m.getArgAsInt(y);
-        // m.getArgAsChar(x);
-        //m.getArgAsChar(y);
-        // m.getArgAsBlob(x);
-        //m.getArgAsBlob(y);
-        
-        //while (m.getAddress() == "/data") {
-        
-        
-       //m.setAddress("/data");
-       // m.addStringArg("/data");
-       // m.addStringArg(",");
-        //m.addStringArg("mirror2_upperBoundary");
-        //m.addStringArg(",");
-        //m.addFloatArg(50.0f);
-        //m.addFloatArg(50.0f);
-        //m.addFloatArg(50.0f);
-      //  while (m.getAddress() == "/data") {
-            //string message = m.getArgAsString(0);
-           //   int i = m.getArgAsInt32(6);
-            //uint64_t j = m.getArgAsInt64(2);
-            // float k = m.getArgAsInt(i);
-            //    mouseX = m.getArgAsInt(0);
-            //mouseY = m.getArgAsInt(0);
-            //ofLog() << m.getArgAsString(0);
-            // int x = m.getArgAsInt(0);
-       // int x;
-       // int y;
-            // receiver.getNextMessage(&m);
-             //  mouseX = m.getArgAsFloat(50.0f);
-            // mouseY = m.getArgAsFloat(50.0f);
-           // m.getArgAsInt(x);
-            //m.getArgAsInt(y);
-            
-            // m.getArgAsBlob(x);
-            //m.getArgAsBlob(y);
-            
-            
-           //            receiver.getNextMessage(&m);
-        //}
-    //}
+    
+    
+    fluidSolver.update();
 }
 
 
@@ -396,7 +257,23 @@ void ofApp::draw(){
     }
     if(drawParticles)
         particleSystem.updateAndDraw(fluidSolver, ofGetWindowSize(), drawFluid);
+   
+    ///---mesh here
+    cam.begin();
+    cam.setNearClip(0);
+    //glPushMatrix();
+    //ofSetColor(23, 220, 210, 60);
+    //model.drawVertices();
     
+    ofPushMatrix();
+    ofTranslate(-ofGetWidth() / 2, -ofGetHeight() / 2);
+    mesh.draw();
+    ofPopMatrix();
+    cam.end();
+    //ofLine(30, 40, 1, 300, 400, 1);
+    glLineWidth(4);
+    /////////---------
+
     //	ofDrawBitmapString(sz, 50, 50);
 #ifdef USE_GUI
     

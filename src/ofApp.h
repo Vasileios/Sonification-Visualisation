@@ -57,7 +57,11 @@ public:
   //void receiveOscMessages(float x, float y, float z);
   //void gotMessage(ofMessage, msg);
     
-    
+    ofVboMesh mesh;
+    ofEasyCam cam;
+    //ofxAssimpModelLoader model;
+    ofLight light;
+
     float                   colorMult;
     float                   velocityMult;
     int                     fluidCellsX;
