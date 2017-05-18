@@ -1,8 +1,3 @@
-/*
- VA0517-MSAFuids data visualisation 
- Receive OSC from SuperCollider
- */
-
 #pragma once
 
 #include "MSAFluid.h"
@@ -10,15 +5,6 @@
 #include "ParticleSystem.h"
 
 #include "ofMain.h"
-#include "GuiApp.h"
-#include "ofxOsc.h"
-
-#define HOST "localhost"
-//#define PORT 12345
-#define PORT 57130
-
-#define NUM_MSG_STRINGS 20
-
 
 // comment this line out if you don't wanna use TUIO
 // you will need ofxTUIO & ofxOsc
@@ -40,22 +26,20 @@
 #ifdef USE_GUI
 #include "ofxSimpleGuiToo.h"
 #endif
-class ofApp : public ofBaseApp{
-    
+
+class ofApp : public ofBaseApp {
 public:
     void setup();
     void update();
     void draw();
     
-    void keyPressed(int key);
-    void keyReleased(int key);
-  //void mouseMoved(int x, int y );
-    void mousePressed(int x, int y, int button);
-  //void mouseDragged(int x, int y, int button);
+    void keyPressed  (int key);
+    void mouseMoved(int x, int y );
+    void mouseDragged(int x, int y, int button);
+    
     void fadeToColor(float r, float g, float b, float speed);
     void addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce);
-  //void receiveOscMessages(float x, float y, float z);
-  //void gotMessage(ofMessage, msg);
+    
     
     
     float                   colorMult;
@@ -72,20 +56,11 @@ public:
     
     ofVec2f                 pMouse;
     
-    ofxOscReceiver          receiver;
-    
-   // float oscX = 0.0;
-    //float oscY = 0.0;
-    
-    shared_ptr<GuiApp> gui2;
-    
-    int current_msg_strings;
-    string msg_strings[NUM_MSG_STRINGS];
-    float timers[NUM_MSG_STRINGS];
-    
-    
 #ifdef USE_TUIO
     ofxTuioClient tuioClient;
 #endif
     
 };
+
+
+

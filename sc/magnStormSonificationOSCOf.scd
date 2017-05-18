@@ -30,7 +30,7 @@ b = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 //-------------------OSC RESPONDER:: SC->OF ----------------------//  
 ~openframeworks = NetAddr("127.0.0.1", 12345);
 
-~openframeworks.sendMsg("data", ~xNt);
+~openframeworks.sendMsg("\data", 100);
 
 //: Another example
 
@@ -59,12 +59,29 @@ b = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 }.fork;
 
 // send to OF
+(
 ~send = {
 	~load.(~files.first) do: { | row |
-		row.postln;
+		//row.postln;
 
 		//	(dur: 0.1, midinote: row.abs).play;
-		~openframeworks.sendMsg("data", row[0].abs);
-		2.wait;
+		//	OSCresponderNode(nil,'/tr',{ | time,responder,msg|	~openframeworks.sendMsg("data", row[0].abs);
+		~openframeworks.sendMsg("/data", row[1].abs.asFloat.postln);
+			0.1.wait;
+
+		//	}).add;
 	}
 }.fork;
+)
+
+
+	OSCresponderNode(nil,'/tr',{ | time,responder,msg|  
+
+				// [time, responder, msg].postln;  
+
+
+				 
+						~openframeworks.sendMsg("data", ~xNt);  
+				
+
+			}).add;  
