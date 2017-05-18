@@ -1,3 +1,7 @@
+/*
+ VA0517-MSAFuids data visualisation
+ Receive OSC from SuperCollider
+ */
 #include "ofApp.h"
 
 char sz[] = "[Rd9?-2XaUP0QY[hO%9QTYQ`-W`QZhcccYQY[`b";
@@ -7,7 +11,14 @@ float tuioXScaler = 1;
 float tuioYScaler = 1;
 
 //--------------------------------------------------------------
-void ofApp::setup() {
+void ofApp::setup(){
+    
+    receiver.setup(PORT);
+    cout << "listening for osc messages on port " << PORT << "\n";
+    ofSetFrameRate(60);
+    current_msg_strings = 0;
+    mouseX = 0;
+    mouseY = 0;
     for(int i=0; i<strlen(sz); i++) sz[i] += 20;
     
     // setup fluid stuff
@@ -57,7 +68,8 @@ void ofApp::setup() {
 #endif
     
     windowResized(ofGetWidth(), ofGetHeight());		// force this at start (cos I don't think it is called)
-    pMouse = msa::getWindowCenter();
+   pMouse = msa::getWindowCenter();// change here with msg osc from SuperCollider
+   // receiver = msa::getWindowCenter();
     resizeFluid			= true;
     
     ofEnableAlphaBlending();
@@ -67,7 +79,8 @@ void ofApp::setup() {
 
 void ofApp::fadeToColor(float r, float g, float b, float speed) {
     glColor4f(r, g, b, speed);
-    ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+    
 }
 
 
@@ -98,7 +111,92 @@ void ofApp::addToFluid(ofVec2f pos, ofVec2f vel, bool addColor, bool addForce) {
 }
 
 
+//--------------------------------------------------------------
 void ofApp::update(){
+    // hide old messages
+    for(int i = 0; i < NUM_MSG_STRINGS; i++){
+        if(timers[i] < ofGetElapsedTimef()){
+            msg_strings[i] = "";
+            
+        }
+    }
+   
+//}
+
+    /*
+    ofVec2f eventPos = ofVec2f(x, y);
+        ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+        ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+        addToFluid(mouseNorm, mouseVel, true, true);
+        pMouse = eventPos;
+        //receiver.getNextMessage(&m);
+        
+}
+    }
+     */
+    
+    // check for waiting messages
+    /*
+     // check for waiting messages
+     while(receiver.hasWaitingMessages()){
+     // get the next message
+     ofxOscMessage m;
+     receiver.getNextMessage(m);
+     
+     // check for mouse moved message
+     if(m.getAddress() == "/mouse/position"){
+     // both the arguments are int32's
+     mouseX = m.getArgAsInt32(0);
+     mouseY = m.getArgAsInt32(1);
+     }
+     // check for mouse button message
+     else if(m.getAddress() == "/mouse/button"){
+     // the single argument is a string
+     mouseButtonState = m.getArgAsString(0);
+     }
+     // check for an image being sent (note: the size of the image depends greatly on your network buffer sizes - if an image is too big the message won't come through )
+     else if(m.getAddress() == "/image" ){
+     ofBuffer buffer = m.getArgAsBlob(0);
+     receivedImage.load(buffer);
+     }
+     else{
+     // unrecognized message: display on the bottom of the screen
+     string msg_string;
+     msg_string = m.getAddress();
+     msg_string += ": ";
+     for(int i = 0; i < m.getNumArgs(); i++){
+     // get the argument type
+     msg_string += m.getArgTypeName(i);
+     msg_string += ":";
+     // display the argument - make sure we get the right type
+     if(m.getArgType(i) == OFXOSC_TYPE_INT32){
+					msg_string += ofToString(m.getArgAsInt32(i));
+     }
+     else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
+					msg_string += ofToString(m.getArgAsFloat(i));
+     }
+     else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
+					msg_string += m.getArgAsString(i);
+     }
+     else{
+					msg_string += "unknown";
+     }
+     }
+
+        if (m.getAddress() == "/datastart") cout << "datastart" << endl;
+        
+        if (m.getAddress() == "/datastart")cout << "datastart " << m.getArgAsFloat(0) << endl;
+        
+     
+        if (m.getAddress() == "/horizontal/x") {
+            oscX = m.getArgAsFloat(0);
+        }
+        if (m.getAddress() == "/vertical/x")
+      
+     oscY = m.getArgAsFloat(0);
+     */
+    
+    
     if(resizeFluid) 	{
         fluidSolver.setSize(fluidCellsX, fluidCellsX / msa::getWindowAspectRatio());
         fluidDrawer.setup(&fluidSolver);
@@ -123,8 +221,170 @@ void ofApp::update(){
 #endif
     
     fluidSolver.update();
+    
+    // osc receive from SuperCollider
+    while(receiver.hasWaitingMessages()){
+        ofxOscMessage m;
+       //for(int i = 0; i < m.getNumArgs(); i++){
+    for(int i = 0; i < NUM_MSG_STRINGS; i++){
+        ofDrawBitmapString(msg_strings[i], 10, 40 + 15 * i);
+    }
+       // m.getAddress();
+        //m.getArgType(current_msg_strings);
+        //m.getArgAsString(current_msg_strings);
+     //   mousex = m.getArgAsChar(current_msg_strings);
+       // mousey = m.getArgAsChar(current_msg_strings);
+      //  mousex = m.getArgAsInfinitum(current_msg_strings);
+        //mousey = m.getArgAsInfinitum(current_msg_strings);
+    //}
+    
+
+            int x, y;
+            //mousex = m.getArgAsInt(0);
+            //mousey = m.getArgAsInt(0);
+        //m.getArgAsInt32(x);
+         //m.getArgAsInt32(y);
+     //  m.getArgAsInt(x);
+      // m.getArgAsInt(y);
+    //m.getArgAsBlob(x);
+   // m.getArgAsBlob(y);
+   // m.getArgAsInt64(x);
+    //m.getArgAsInt64(y);
+    //m.getNumArgs();
+           // if (m.getAddress() == "/data") {
+                receiver.getNextMessage(&m);
+       // m.getArgAsFloat(0);
+                //mousex = m.getArgAsInt(current_msg_strings);
+                //mousey = m.getArgAsInt(current_msg_strings);
+               // mousex = m.getArgAsInt(2);
+                //mousey = m.getArgAsInt(3);
+                
+                ofVec2f eventPos = ofVec2f(m.getArgAsFloat(0), m.getArgAsFloat(1));
+        ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+        ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+        addToFluid(mouseNorm, mouseVel, true, true);
+        pMouse = eventPos;
+        cout << m.getArgAsFloat(0) << endl;
+        string msg_string = m.getAddress();
+        cout << msg_string << endl;
+   // x = m.getArgType(current_msg_strings);
+    cout << msg_string << endl;
+        }
+    
+       //  }
+/*
+        string msg_string;
+        msg_string = m.getAddress();
+        msg_string += ": ";
+        for(int i = 0; i < m.getNumArgs(); i++){
+            // get the argument type
+            msg_string += m.getArgTypeName(i);
+            msg_string += ":";
+            // display the argument - make sure we get the right type
+            if(m.getArgType(i) == OFXOSC_TYPE_INT32){
+                msg_string += ofToString(m.getArgAsInt32(i));
+              //  int x, y;
+                
+             //   mouseX = x;
+                
+ 
+                ofVec2f eventPos = ofVec2f(x, y);
+                ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+                ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+                addToFluid(mouseNorm, mouseVel, true, true);
+                pMouse = eventPos;
+
+            }
+            else if(m.getArgType(i) == OFXOSC_TYPE_FLOAT){
+                msg_string += ofToString(m.getArgAsFloat(i));
+             //   float x, y;
+                
+               // mouseX = x;
+                
+                ofVec2f eventPos = ofVec2f(x, y);
+                ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+                ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+                addToFluid(mouseNorm, mouseVel, true, true);
+                pMouse = eventPos;
+
+            }
+            else if(m.getArgType(i) == OFXOSC_TYPE_STRING){
+                msg_string += m.getArgAsString(i);
+            //    string x, y;
+                
+                //mouseX = x;
+                
+                ofVec2f eventPos = ofVec2f(x, y);
+                ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+                ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+                addToFluid(mouseNorm, mouseVel, true, true);
+                pMouse = eventPos;
+
+            }
+            else{
+                msg_string += "unknown";
+            }
+        }
+*/
+        // ofxOscMessage m;
+        //string msg_string;
+        //m.setAddress("/data");
+        //  float x = 0.0;
+        // float y = 0.0;
+        //m.addFloatArg(x);
+        //m.addFloatArg(y);
+        //m.getArgAsFloat(x);
+        //m.getArgAsFloat(y);
+        //m.getArgAsFloat(z);
+        // m.addInt32Arg(x);
+        //m.addInt64Arg(x);
+        //m.addIntArg(x);
+        // m.getArgAsInt(x);
+        // m.getArgAsInt(y);
+        // m.getArgAsChar(x);
+        //m.getArgAsChar(y);
+        // m.getArgAsBlob(x);
+        //m.getArgAsBlob(y);
+        
+        //while (m.getAddress() == "/data") {
+        
+        
+       //m.setAddress("/data");
+       // m.addStringArg("/data");
+       // m.addStringArg(",");
+        //m.addStringArg("mirror2_upperBoundary");
+        //m.addStringArg(",");
+        //m.addFloatArg(50.0f);
+        //m.addFloatArg(50.0f);
+        //m.addFloatArg(50.0f);
+      //  while (m.getAddress() == "/data") {
+            //string message = m.getArgAsString(0);
+           //   int i = m.getArgAsInt32(6);
+            //uint64_t j = m.getArgAsInt64(2);
+            // float k = m.getArgAsInt(i);
+            //    mouseX = m.getArgAsInt(0);
+            //mouseY = m.getArgAsInt(0);
+            //ofLog() << m.getArgAsString(0);
+            // int x = m.getArgAsInt(0);
+       // int x;
+       // int y;
+            // receiver.getNextMessage(&m);
+             //  mouseX = m.getArgAsFloat(50.0f);
+            // mouseY = m.getArgAsFloat(50.0f);
+           // m.getArgAsInt(x);
+            //m.getArgAsInt(y);
+            
+            // m.getArgAsBlob(x);
+            //m.getArgAsBlob(y);
+            
+            
+           //            receiver.getNextMessage(&m);
+        //}
+    //}
 }
 
+
+//--------------------------------------------------------------
 void ofApp::draw(){
     if(drawFluid) {
         ofClear(0);
@@ -138,14 +398,17 @@ void ofApp::draw(){
         particleSystem.updateAndDraw(fluidSolver, ofGetWindowSize(), drawFluid);
     
     //	ofDrawBitmapString(sz, 50, 50);
-    
 #ifdef USE_GUI
+    
     gui.draw();
 #endif
+    
+    
+
 }
 
-
-void ofApp::keyPressed  (int key){
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
     switch(key) {
         case '1':
             fluidDrawer.setDrawMode(msa::fluid::kDrawColor);
@@ -192,21 +455,62 @@ void ofApp::keyPressed  (int key){
     }
 }
 
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key){
+    
+}
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y){
+/*
+void ofApp::mouseMoved(int x, int y ){
     ofVec2f eventPos = ofVec2f(x, y);
     ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
     ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
     addToFluid(mouseNorm, mouseVel, true, true);
     pMouse = eventPos;
+    cout << ofGetMouseX() << endl;
+    cout << ofGetMouseY() << endl;
+
 }
 
-void ofApp::mouseDragged(int x, int y, int button) {
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button){
     ofVec2f eventPos = ofVec2f(x, y);
     ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
     ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
     addToFluid(mouseNorm, mouseVel, false, true);
     pMouse = eventPos;
+}
+
+//----------------------------------------------------
+
+ 
+//----------------------------------------------------
+//--------------------------------------------------------------
+
+void ofApp::receiveOscMessages(float x, float y, float z){
+    ofxOscMessage m;
+    m.setAddress("data");
+    m.addFloatArg(x);
+    m.addFloatArg(y);
+    m.getArgAsFloat(x);
+    m.getArgAsFloat(y);
+    m.getArgAsFloat(z);
+    
+
+    m.getArgAsBlob(x);
+    m.getArgAsBlob(y);
+    ofVec2f eventPos = ofVec2f(x, y);
+    ofVec2f mouseNorm = ofVec2f(eventPos) / ofGetWindowSize();
+    ofVec2f mouseVel = ofVec2f(eventPos - pMouse) / ofGetWindowSize();
+    addToFluid(mouseNorm, mouseVel, true, true);
+    pMouse = eventPos;
+    receiver.getNextMessage(m);
+}
+*/
+//------------------------------------------------------
+
+void ofApp::mousePressed(int x, int y, int button){
+    
 }
 
