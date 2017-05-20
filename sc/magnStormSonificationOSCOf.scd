@@ -25,7 +25,7 @@ a = CSVFileReader.read("../data/MagneticStorm12-15\ March2016_NOA\'s\ magnetomet
 
 // OSC send to other application (OF)
 
-b = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
+b = NetAddr.new("127.0.0.1", 12345); � �// create the NetAddr
 
 //-------------------OSC RESPONDER:: SC->OF ----------------------//  
 ~openframeworks = NetAddr("127.0.0.1", 12345);
@@ -63,10 +63,9 @@ b = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 ~send = {
 	~load.(~files.first) do: { | row |
 		//row.postln;
-
+	var addr = NetAddr("127.0.0.1", 12345);
 		//	(dur: 0.1, midinote: row.abs).play;
-		//	OSCresponderNode(nil,'/tr',{ | time,responder,msg|	~openframeworks.sendMsg("data", row[0].abs);
-		~openframeworks.sendMsg("/data", row[1].abs.asFloat.postln);
+		addr.sendMsg("/data", row[1].abs.asFloat.postln);
 			0.1.wait;
 
 		//	}).add;
@@ -74,14 +73,3 @@ b = NetAddr.new("127.0.0.1", 12345);    // create the NetAddr
 }.fork;
 )
 
-
-	OSCresponderNode(nil,'/tr',{ | time,responder,msg|  
-
-				// [time, responder, msg].postln;  
-
-
-				 
-						~openframeworks.sendMsg("data", ~xNt);  
-				
-
-			}).add;  
