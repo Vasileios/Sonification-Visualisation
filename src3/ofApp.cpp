@@ -111,7 +111,7 @@ void ofApp::drawWithModel(){
     ofPopMatrix();
 }
 
-//draw the model manually
+//Ñ draw the model manually
 void ofApp::drawWithMesh(){
 
     while (receiver.hasWaitingMessages()) {
